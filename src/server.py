@@ -6,7 +6,7 @@ serverPort = 8080
 
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
-        with open("homework4.html", mode="r", encoding="utf-8") as file:
+        with open("main_page.html", mode="r", encoding="utf-8") as file:
             data = file.read()
         self.send_response(200)
         self.send_header("Content-type", "text/html")
