@@ -1,10 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <style>
+        /* styles.css */
+        h1 {
+            color: purple;
+        }
 
+    </style>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-2">
+            <div class="row w-100">
+                <div class="container text-bg-dark h-100" style="position: fixed; width: 16.67%; height: 100%;">
+                    <div class="card text-bg-dark mb-5 vh-100" style="max-width: 18rem;">
+                        <div class="card-header">
+                            <h3>Меню</h3>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <button class="btn btn-dark w-100 text-start" type="button">Главная</button>
+                                <button type="button" class="btn btn-dark w-100 text-start">Категории</button>
+                                <button type="button" class="btn btn-dark w-100 text-start">Заказы</button>
+                                <button type="button" class="btn btn-dark w-100 text-start">Контакты</button>
+                            </ul>
+                        </div>
+                        <div class="dropup-center dropup mt-3 ms-3 ">
+                            <button class="btn btn-secondary dropdown-toggle w-100 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Панель администратора
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><button class="dropdown-item" type="button">Профиль</button></li>
+                                <li><a class="dropdown-item" href="#">Выход</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-10">
+            <div class="row justify-content-center mt-5 mb-3">
+                <h1 class="text-center">VissumLex - адвокаты в Испании</h1>
+                <p class="text-center">Юридическая помощь на все случаи жизни в Испании</p>
+            </div>
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 d-flex flex-column">
+                            <div class="card-body">
+                                <h5 class="card-title">Консультация с адвокатом</h5>
+                                <h6 class="card-subtitle mb-2 text-body-secondary">100 €</h6>
+                                <p class="card-text">60 минут тет-а-тет с адвокатом. Налогообложение, бизнес, ВНЖ.</p>
+                                <a href="#" class="btn btn-primary">Связаться</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 d-flex flex-column">
+                            <div class="card-body">
+                                <h5 class="card-title">ВНЖ Испании</h5>
+                                <h6 class="card-subtitle mb-2 text-body-secondary">1600 €</h6>
+                                <p class="card-text">Европейские документы для всей семьи на 3+2 года</p>
+                                <a href="#" class="btn btn-primary">Связаться</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 d-flex flex-column">
+                            <div class="card-body">
+                                <h5 class="card-title">Налогообложение</h5>
+                                <h6 class="card-subtitle mb-2 text-body-secondary">680 €</h6>
+                                <p class="card-text">Налоговые декларации, льготы и субсидии</p>
+                                <a href="#" class="btn btn-primary">Связаться</a>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
