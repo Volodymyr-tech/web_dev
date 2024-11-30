@@ -1,12 +1,15 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import time
+import os
 
+from config import HTML_DIR
+
+html_page = os.path.join(HTML_DIR, "catalog_page.html")
 hostName = "localhost"
 serverPort = 8080
 
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
-        with open("homework4.html", mode="r", encoding="utf-8") as file:
+        with open(html_page, mode="r", encoding="utf-8") as file:
             data = file.read()
         self.send_response(200)
         self.send_header("Content-type", "text/html")
