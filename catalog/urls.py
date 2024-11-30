@@ -3,7 +3,7 @@ from tkinter.font import names
 from django.urls import path
 from . import views
 
-app_name = "students"
+app_name = "catalog"
 
 urlpatterns = [
     path("main_page/", views.main_page, name="main_page"),
