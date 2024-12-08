@@ -1,6 +1,4 @@
 import os
-
-import dotenv
 from django.db import models
 from dotenv import load_dotenv
 load_dotenv()
@@ -8,32 +6,45 @@ load_dotenv()
 
 class Product(models.Model):
 
-    IMMIGRATION = "immigration"
-    BUSINESS = "bussines"
-    TAXES = "taxes"
-    REAL_ESTATE = "real_estate"
-
-    CATEGORIES_CHOICES = [
-        (IMMIGRATION, "Иммиграция"),
-        (BUSINESS, "Бизнес"),
-        (TAXES, "Налогообложение"),
-        (REAL_ESTATE, "Недвижимость")
-    ]
-
-
     name = models.CharField(max_length=155, verbose_name="Название")
-    discription = models.TextField(verbose_name="Описание продукта")
-    image = models.ImageField(verbose_name="Изображение")
-    category = models.CharField(max_length=155, choices=CATEGORIES_CHOICES, verbose_name="Категория")
+    description = models.TextField(verbose_name="Описание продукта")
+    image = models.ImageField(upload_to='photos/', verbose_name="Изображение", null=True, blank=True)
+    category = models.ForeignKey("catalog.Categories", on_delete=models.CASCADE,
+                                verbose_name="Категория",
+                                related_name="products")#По умолчанию, ForeignKey связывается с первичным ключом (полем primary_key=True)
     purchase_price = models.FloatField(verbose_name="Цена за покупку")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.name} {self.discription}'
+        return f'{self.name} {self.description}'
 
     class Meta:
-        db_table = os.getenv("NAME")
+       # db_table = os.getenv("NAME")
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
         ordering = ['purchase_price']
+
+
+class Categories(models.Model):
+    IMMIGRATION = "Иммиграция" #данные поля отображаются в БД
+    BUSINESS = "Бизнес"
+    ESTATE = "Недвижимость"
+    TAXES = "Налоги"
+
+    CATEGORIES_NAMES_CHOICES = [
+        (IMMIGRATION, "Услуги по ВНЖ"),#данные поля отображаются в админке Django
+        (BUSINESS, "Бизнес услуги"),
+        (ESTATE, "Сделки с недвижимостью"),
+        (TAXES, "Налогообложение")
+    ]
+
+
+    name = models.CharField(primary_key=True, max_length=155, choices=CATEGORIES_NAMES_CHOICES, verbose_name="Название категории")
+    description = models.CharField(max_length=255, verbose_name="Описание категории")
+
+    class Meta:
+       # db_table = os.getenv("NAME")
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
+        ordering = ["name"]
