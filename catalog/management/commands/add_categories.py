@@ -9,5 +9,5 @@ class Command(BaseCommand):
         Categories.objects.all().delete()
 
         call_command("loaddata", "fixture_categories.json")
-        self.stdout.write(self.style.SUCCESS("Продукты успешно добавлены"))
+        self.stdout.write(self.style.SUCCESS("Категории успешно добавлены"))
 
