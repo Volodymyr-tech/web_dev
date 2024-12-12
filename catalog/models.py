@@ -23,7 +23,7 @@ class Product(models.Model):
        # db_table = os.getenv("NAME")
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
-        ordering = ['purchase_price']
+        ordering = ['id']
 
 
 class Categories(models.Model):

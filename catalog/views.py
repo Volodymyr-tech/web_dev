@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 
+from catalog.models import Product
+
 
 def main_page(request):
     '''Функиция вывода главной страницы'''
@@ -28,5 +30,17 @@ def show_category(request):
     if request.method == "GET":
         return render(request, 'html_pages/category.html')
 
-#def show_item(request, item_id):
-#    return render(request, "app/item.html", {'item_id':item_id})
+def show_products(request):
+    product = Product.objects.all()
+    context = {
+        "product" : product
+    }
+    return render(request, "html_pages/product_list.html", context)
+
+
+def product_detail(request, pk):
+    product = Product.objects.get(pk=pk)
+    context = {
+        "product":product
+    }
+    return render(request, "html_pages/product_details.html", context)
