@@ -1,18 +1,26 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 
-from catalog.models import Product
+from catalog.models import Product, Categories
 
 
 def main_page(request):
     '''Функиция вывода главной страницы'''
-    if request.method == "GET":
-        return render(request, "html_pages/main_page.html")
+    product = Product.objects.all()
+    context = {
+        "product" : product
+    }
+    return render(request, "html_pages/main_page.html", context)
 
-def show_catalog(request):
+
+def show_categories(request):
     '''Функиция вывода страницы Каталог'''
+    categories = Categories.objects.all()
+    context = {
+        "categories":categories
+    }
     if request.method == "GET":
-        return render(request, "html_pages/catalog.html")
+        return render(request, "html_pages/categories.html", context)
 
 def contact(request):
     '''Функиция вывода страницы Контакты и отправка POST запроса в форме'''
@@ -30,12 +38,6 @@ def show_category(request):
     if request.method == "GET":
         return render(request, 'html_pages/category.html')
 
-def show_products(request):
-    product = Product.objects.all()
-    context = {
-        "product" : product
-    }
-    return render(request, "html_pages/product_list.html", context)
 
 
 def product_detail(request, pk):
