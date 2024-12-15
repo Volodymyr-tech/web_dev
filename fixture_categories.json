@@ -1,0 +1,30 @@
+[
+    {
+        "model": "catalog.categories",
+        "pk": "Иммиграция",
+        "fields": {
+            "description": "Услуги по оформлению ВНЖ и переезду в Испанию"
+        }
+    },
+    {
+        "model": "catalog.categories",
+        "pk": "Бизнес",
+        "fields": {
+            "description": "Регистрация компаний и бизнес-консультирование"
+        }
+    },
+    {
+        "model": "catalog.categories",
+        "pk": "Недвижимость",
+        "fields": {
+            "description": "Сопровождение сделок с недвижимостью"
+        }
+    },
+    {
+        "model": "catalog.categories",
+        "pk": "Налоги",
+        "fields": {
+            "description": "Консультации и сопровождение налоговых вопросов"
+        }
+    }
+]
