@@ -12,13 +12,13 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='categories',
+            model_name='categories.html',
             name='name',
             field=models.CharField(choices=[('Иммиграция', 'Услуги по ВНЖ'), ('Бизнес', 'Бизнес услуги'), ('Недвижимость', 'Сделки с недвижимостью'), ('Налоги', 'Налогообложение')], max_length=155, primary_key=True, serialize=False, verbose_name='Название категории'),
         ),
         migrations.AlterField(
             model_name='product',
             name='category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products', to='catalog.categories', verbose_name='Категория'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products', to='catalog.categories.html', verbose_name='Категория'),
         ),
     ]

@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 ('purchase_price', models.FloatField(verbose_name='Цена за покупку')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='catalog.categories', verbose_name='Категория')),
+                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='catalog.categories.html', verbose_name='Категория')),
             ],
             options={
                 'verbose_name': 'Продукт',

@@ -8,7 +8,7 @@ class Product(models.Model):
 
     name = models.CharField(max_length=155, verbose_name="Название")
     description = models.TextField(verbose_name="Описание продукта")
-    image = models.ImageField(upload_to='photos/', verbose_name="Изображение", null=True, blank=True)
+    image = models.ImageField(upload_to='products/', verbose_name="Изображение", null=True, blank=True)
     category = models.ForeignKey("catalog.Categories", on_delete=models.CASCADE,
                                 verbose_name="Категория",
                                 related_name="products")#По умолчанию, ForeignKey связывается с первичным ключом (полем primary_key=True)
@@ -23,7 +23,7 @@ class Product(models.Model):
        # db_table = os.getenv("NAME")
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
-        ordering = ['purchase_price']
+        ordering = ['id']
 
 
 class Categories(models.Model):
