@@ -10,14 +10,14 @@ from blog.models import BlogPost
 
 class BlogListView(ListView):
     queryset = BlogPost.objects.order_by('-created_at')# Сортируем по дате создания, от новых к старым
-    template_name = 'blog/blog_list.html'
-    context_object_name = 'blog'
+    template_name = 'blog/blog_list.html' # Путь к шаблону
+    context_object_name = 'blog' # Контекстное имя для переменной в шаблоне
 
 
 class AddBlogFormView(CreateView):
     form_class = BlogPostForm
     template_name = 'blog/add_blog_form.html'
-    success_url = reverse_lazy('blog:blog')
+    success_url = reverse_lazy('blog:blog')# Перенаправляем на страницу блога после успешного создания
 
 
 class BlogDetailView(DetailView):

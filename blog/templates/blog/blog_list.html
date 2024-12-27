@@ -184,7 +184,7 @@
         </div>
 
 <div>
-  <h4 class="fst-italic">Recent posts</h4>
+  <h4 class="fst-italic">Недавние статьи</h4>
   <ul class="list-unstyled">
     {% for post in blog|slice:":4" %}
       <li class="border-top py-3">
@@ -198,7 +198,7 @@
           <!-- Текст и ссылка -->
           <div class="d-flex flex-column">
             <h6 class="mb-1">{{ post.title }}</h6>
-            <span class="text-muted">Просмотры: {{ post.views }}</span>
+            <span class="text-muted">Просмотры: {{post.views}}</span>
             <span class="text-primary">Читать дальше</span>
           </div>
         </a>

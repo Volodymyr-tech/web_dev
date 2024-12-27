@@ -1,10 +1,22 @@
 {% extends 'html_pages/base.html' %}
 
 {% block content %}
-<h1>Update Blog Post</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save changes</button>
-</form>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4 shadow-sm" style="max-width: 600px; width: 100%;">
+        <h2 class="text-center mb-4">Редактирование статьи</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-error">{{ form.non_field_errors }}</div>
+            {% for f in form %}
+            <div class="form-group mt-3">
+                <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+                {{ f }}
+            </div>
+            <div class="form-error text-danger">{{ f.errors }}</div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary mt-3 w-100">Сохранить изменения</button>
+            <a href="{% url 'blog:detail' blog_post.slug %}" class="btn btn-secondary mt-3 w-100" >Я передумал</a>
+        </form>
+    </div>
+</div>
 {% endblock %}
