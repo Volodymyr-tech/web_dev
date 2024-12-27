@@ -19,10 +19,10 @@ from blog.models import BlogPost
 
 
 class BlogListView(ListView):
-    queryset = BlogPost.objects.order_by('-created_at')# Сортируем по дате создания, от новых к старым
+    queryset = BlogPost.objects.filter(status=BlogPost.PUBLISHED).order_by('-created_at')# Сортируем по дате создания, от новых к старым
     template_name = 'blog/blog_list.html' # Путь к шаблону
     context_object_name = 'blog' # Контекстное имя для переменной в шаблоне
-    extra_context = {'popular_posts': BlogPost.objects.all().order_by('-views')[:2]}  # Выводим 2 самых популярных статей
+    extra_context = {'popular_posts': BlogPost.objects.filter(status=BlogPost.PUBLISHED).order_by('-views')[:2]}  # Выводим 2 самых популярных статей
 
 
 class AddBlogFormView(CreateView):
