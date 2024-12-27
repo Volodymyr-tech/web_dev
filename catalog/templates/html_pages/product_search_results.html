@@ -1,0 +1,19 @@
+{% extends 'html_pages/base.html' %}
+
+{% block title %}Результаты поиска{% endblock %}
+
+{% block content %}
+    <h1>Результаты поиска для "{{ query }}"</h1>
+    {% if results %}
+        <ul>
+        {% for product in results %}
+            <li>
+                <h5>{{ product.name }}</h5>
+                <p>{{ product.description }}</p>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Ничего не найдено.</p>
+    {% endif %}
+{% endblock %}
