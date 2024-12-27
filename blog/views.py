@@ -1,4 +1,6 @@
-from django.shortcuts import render
+import os
+
+from django.core.mail import send_mail
 from django.urls import reverse_lazy
 
 # Create your views here.
@@ -18,6 +20,25 @@ class AddBlogFormView(CreateView):
     form_class = BlogPostForm
     template_name = 'blog/add_blog_form.html'
     success_url = reverse_lazy('blog:blog')# Перенаправляем на страницу блога после успешного создания
+
+    def form_valid(self, form):
+        # Сохраняем объект, но не перенаправляем
+        response = super().form_valid(form)
+
+        # Вызываем метод отправки уведомления
+        self.notification()
+        return response
+
+
+    def notification(self):
+        send_mail(
+            'Новая статья',
+            f'На сайте {self.request.get_host()} была добавлена новая статья: {self.object.title}',
+            os.getenv('EMAIL_HOST_USER'),
+            ['tvoitarget.info@gmail.com'],
+            fail_silently=False,  # Отключаем отправку писем с ошибками
+        )
+
 
 
 class BlogDetailView(DetailView):
