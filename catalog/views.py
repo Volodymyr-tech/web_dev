@@ -1,8 +1,10 @@
+from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 
 from catalog.models import Product, Categories, Lead
 from catalog.forms import ProductForm, LeadForm
+from config import settings
 
 
 class MainPageView(ListView):
@@ -24,6 +26,24 @@ class LeadCreateView(CreateView):
     form_class = LeadForm  # Указываем форму
     template_name = 'html_pages/contact.html'  # Шаблон для рендеринга
     success_url = '/catalog/'  # Куда перенаправлять после успешного сохранения
+
+    def form_valid(self, form):
+        # Сохраняем объект, но не перенаправляем
+        response = super().form_valid(form)
+
+        # Вызываем метод отправки уведомления
+        self.notification()
+        return response
+
+
+    def notification(self):
+        send_mail(
+            'Новая заявка',
+            f'На сайте {self.request.get_host()} была получена новая заявка от: {self.object.name} - {self.object.email}',
+            settings.EMAIL_HOST_USER,
+            ['tvoitarget.info@gmail.com'],
+            fail_silently=False,  # Отключаем отправку писем с ошибками
+        )
 
 
 

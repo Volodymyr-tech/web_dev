@@ -1,5 +1,13 @@
 import os
 
+from dotenv import load_dotenv
+
+from dotenv import load_dotenv
+
+from config import settings
+
+load_dotenv()
+
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
 
@@ -14,6 +22,7 @@ class BlogListView(ListView):
     queryset = BlogPost.objects.order_by('-created_at')# Сортируем по дате создания, от новых к старым
     template_name = 'blog/blog_list.html' # Путь к шаблону
     context_object_name = 'blog' # Контекстное имя для переменной в шаблоне
+    extra_context = {'popular_posts': BlogPost.objects.all().order_by('-views')[:2]}  # Выводим 2 самых популярных статей
 
 
 class AddBlogFormView(CreateView):
@@ -34,7 +43,7 @@ class AddBlogFormView(CreateView):
         send_mail(
             'Новая статья',
             f'На сайте {self.request.get_host()} была добавлена новая статья: {self.object.title}',
-            os.getenv('EMAIL_HOST_USER'),
+            settings.EMAIL_HOST_USER,
             ['tvoitarget.info@gmail.com'],
             fail_silently=False,  # Отключаем отправку писем с ошибками
         )

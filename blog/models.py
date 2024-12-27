@@ -22,6 +22,13 @@ class BlogPost(models.Model):
         status = models.CharField(choices=STATUS_CHOICES, verbose_name="Статус публикации", default=IN_WORK, blank=True)
         views = models.IntegerField(default=0, null=True)
 
+
+        class Meta:
+                verbose_name = "Статья блога"
+                verbose_name_plural = "Статьи блога"
+                ordering = ["-created_at"]
+
+
         def save(self, *args, **kwargs):
                 if not self.slug and self.title:
                         self.slug = slugify(self.title)
