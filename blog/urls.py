@@ -1,9 +1,13 @@
-
 from django.urls import path
-from .views import BlogListView, AddBlogFormView, BlogDetailView, UpdateBlogView, DeleteBlogView
+from .views import (
+    BlogListView,
+    AddBlogFormView,
+    BlogDetailView,
+    UpdateBlogView,
+    DeleteBlogView,
+)
 
 app_name = "blog"
-
 
 
 urlpatterns = [

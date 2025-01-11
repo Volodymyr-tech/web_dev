@@ -2,9 +2,14 @@ from django import forms
 from catalog.models import Product, Categories, Lead
 from .validators import validate_no_forbidden_words
 
+
 class ProductForm(forms.ModelForm):
-    category = forms.ModelChoiceField(queryset=Categories.objects.all(), empty_label="Категория не выбрана",
-                                      label='Категория продукта', widget=forms.Select(attrs={"class": "form-control"}))
+    category = forms.ModelChoiceField(
+        queryset=Categories.objects.all(),
+        empty_label="Категория не выбрана",
+        label="Категория продукта",
+        widget=forms.Select(attrs={"class": "form-control"}),
+    )
 
     class Meta:
         model = Product
@@ -17,6 +22,7 @@ class ProductForm(forms.ModelForm):
         }
 
         # Подключаем валидаторы
+
     def clean_name(self):
         name = self.cleaned_data.get("name")
         validate_no_forbidden_words(name)  # Проверяем запрещённые слова
@@ -33,17 +39,38 @@ class ProductForm(forms.ModelForm):
             raise forms.ValidationError("Цена не может быть отрицательной")
         return purchase_price
 
+    def clean_image(self):
+        image = self.cleaned_data['image']
+        if image:
+            if not image.name.lower().endswith(('.jpeg', '.png', '.jpg')):
+                raise forms.ValidationError('Фото неверного формата')
 
+            if image.size > 5 * 1024 * 1024:
+                raise forms.ValidationError('Фото не должно превышать 5 МБ')
+
+        return image
 
 
 class LeadForm(forms.ModelForm):
     class Meta:
         model = Lead
-        fields = ['name', 'email', 'phone', 'message', 'checkbox']
+        fields = ["name", "email", "phone", "message", "checkbox"]
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите имя'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Введите email'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите телефон'}),
-            'message': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Введите сообщение'}),
-            'checkbox': forms.CheckboxInput(attrs={'class': 'form-check-input'})
+            "name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Введите имя"}
+            ),
+            "email": forms.EmailInput(
+                attrs={"class": "form-control", "placeholder": "Введите email"}
+            ),
+            "phone": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Введите телефон"}
+            ),
+            "message": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 5,
+                    "placeholder": "Введите сообщение",
+                }
+            ),
+            "checkbox": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }

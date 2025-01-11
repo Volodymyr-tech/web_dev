@@ -7,21 +7,57 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='BlogPost',
+            name="BlogPost",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
-                ('slug', models.SlugField(blank=True, default='', max_length=255, unique=True, verbose_name='Slug')),
-                ('content', models.TextField(verbose_name='Содержимое поста')),
-                ('image', models.ImageField(blank=True, null=True, upload_to='blog/', verbose_name='Изображение')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('status', models.CharField(blank=True, choices=[('Опубликовано', 'Опубликовано'), ('В работе', 'В работе'), ('Удалено', 'Удалено')], default='В работе', verbose_name='Статус публикации')),
-                ('views', models.IntegerField(blank=True, null=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=100)),
+                (
+                    "slug",
+                    models.SlugField(
+                        blank=True,
+                        default="",
+                        max_length=255,
+                        unique=True,
+                        verbose_name="Slug",
+                    ),
+                ),
+                ("content", models.TextField(verbose_name="Содержимое поста")),
+                (
+                    "image",
+                    models.ImageField(
+                        blank=True,
+                        null=True,
+                        upload_to="blog/",
+                        verbose_name="Изображение",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "status",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("Опубликовано", "Опубликовано"),
+                            ("В работе", "В работе"),
+                            ("Удалено", "Удалено"),
+                        ],
+                        default="В работе",
+                        verbose_name="Статус публикации",
+                    ),
+                ),
+                ("views", models.IntegerField(blank=True, null=True)),
             ],
         ),
     ]

@@ -6,34 +6,54 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('catalog', '0002_alter_categories_name_alter_product_category'),
+        ("catalog", "0002_alter_categories_name_alter_product_category"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Lead',
+            name="Lead",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=155, verbose_name='Имя')),
-                ('email', models.EmailField(max_length=254, verbose_name='Email')),
-                ('phone', models.CharField(max_length=155, verbose_name='Телефон')),
-                ('message', models.TextField(verbose_name='Сообщение')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('checkbox', models.BooleanField(default=False, verbose_name='Согласие на обработку персональных данных')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=155, verbose_name="Имя")),
+                ("email", models.EmailField(max_length=254, verbose_name="Email")),
+                ("phone", models.CharField(max_length=155, verbose_name="Телефон")),
+                ("message", models.TextField(verbose_name="Сообщение")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "checkbox",
+                    models.BooleanField(
+                        default=False,
+                        verbose_name="Согласие на обработку персональных данных",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Лид',
-                'verbose_name_plural': 'Лиды',
-                'ordering': ['-created_at'],
+                "verbose_name": "Лид",
+                "verbose_name_plural": "Лиды",
+                "ordering": ["-created_at"],
             },
         ),
         migrations.AlterModelOptions(
-            name='product',
-            options={'ordering': ['id'], 'verbose_name': 'Продукт', 'verbose_name_plural': 'Продукты'},
+            name="product",
+            options={
+                "ordering": ["id"],
+                "verbose_name": "Продукт",
+                "verbose_name_plural": "Продукты",
+            },
         ),
         migrations.AlterField(
-            model_name='product',
-            name='image',
-            field=models.ImageField(blank=True, null=True, upload_to='products/', verbose_name='Изображение'),
+            model_name="product",
+            name="image",
+            field=models.ImageField(
+                blank=True, null=True, upload_to="products/", verbose_name="Изображение"
+            ),
         ),
     ]
