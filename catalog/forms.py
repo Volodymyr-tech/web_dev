@@ -1,6 +1,6 @@
 from django import forms
 from catalog.models import Product, Categories, Lead
-
+from .validators import validate_no_forbidden_words
 
 class ProductForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=Categories.objects.all(), empty_label="Категория не выбрана",
@@ -15,6 +15,26 @@ class ProductForm(forms.ModelForm):
             "image": forms.ClearableFileInput(attrs={"class": "form-control-file"}),
             "purchase_price": forms.NumberInput(attrs={"class": "form-control"}),
         }
+
+        # Подключаем валидаторы
+    def clean_name(self):
+        name = self.cleaned_data.get("name")
+        validate_no_forbidden_words(name)  # Проверяем запрещённые слова
+        return name
+
+    def clean_description(self):
+        description = self.cleaned_data.get("description")
+        validate_no_forbidden_words(description)  # Проверяем запрещённые слова
+        return description
+
+    def clean_purchase_price(self):
+        purchase_price = self.cleaned_data.get("purchase_price")
+        if purchase_price < 0:
+            raise forms.ValidationError("Цена не может быть отрицательной")
+        return purchase_price
+
+
+
 
 class LeadForm(forms.ModelForm):
     class Meta:

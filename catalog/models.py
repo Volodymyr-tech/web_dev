@@ -42,6 +42,7 @@ class Categories(models.Model):
 
     name = models.CharField(primary_key=True, max_length=155, choices=CATEGORIES_NAMES_CHOICES, verbose_name="Название категории")
     description = models.CharField(max_length=255, verbose_name="Описание категории")
+    slug = models.SlugField(max_length=255, db_index=True, verbose_name="Slug", blank=True)
 
     class Meta:
        # db_table = os.getenv("NAME")

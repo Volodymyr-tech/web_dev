@@ -1,6 +1,7 @@
 from django.core.mail import send_mail
+from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from catalog.models import Product, Categories, Lead
 from catalog.forms import ProductForm, LeadForm
@@ -20,6 +21,13 @@ class CategoriesListView(ListView):
     model = Categories  # Модель для отображения
     template_name = "html_pages/categories.html"  # Путь к шаблону
     context_object_name = "categories"  # Название переменной в шаблоне
+
+
+class CategoriesDetailView(DetailView):
+    model = Categories  # Модель для отображения
+    template_name = 'html_pages/categories_details.html'
+    context_object_name = 'category'
+
 
 
 class LeadCreateView(CreateView):
@@ -59,10 +67,31 @@ class AddProductView(CreateView):
     success_url = reverse_lazy("catalog:home")  # Переход на страницу каталога после добавления продукта
 
 
-#def product_search(request):
-#    query = request.GET.get('query', '')  # Получаем строку поиска из запроса
-#    results = Product.objects.filter(description__icontains=query) if query else []  # Фильтруем по описанию
-#    return render(request, 'product_search_results.html', {'query': query, 'results': results})
+class ProductSearchView(ListView):
+    model = Product
+    template_name = 'html_pages/product_search_results.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        if query:
+            return Product.objects.filter(name__icontains=query)  # Поиск по названию продукта
+        return Product.objects.all()
+
+
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'html_pages/update_product_form.html'
+    success_url = reverse_lazy('catalog:home')
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = 'html_pages/delete_product_confirm.html'
+    context_object_name = 'product'
+    success_url = reverse_lazy('catalog:home')
 
 
 

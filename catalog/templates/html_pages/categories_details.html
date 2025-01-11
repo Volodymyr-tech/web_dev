@@ -7,14 +7,14 @@
           <div class="card shadow-sm">
             <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
             <div class="card-body">
-              <p class="card-text">{{ product.name }} €{{ product.purchase_price }}</p>
-              <p class="card-text">{{ product.description }}</p>
+              <p class="card-text">{{ category.name }}</p>
+              <p class="card-text">{{ category.description }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:delete-product' pk=product.pk %}">Удалить</a>
-                  <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:update-product' pk=product.pk %}">Изменить</a>
+                  <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:delete-detail' pk=category.pk %}">Удалить</a>
+                  <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:category-detail' pk=category.pk %}">Изменить</a>
                 </div>
-                <small class="text-body-secondary">{{ product.updated_at }}</small>
+                <small class="text-body-secondary">Как-то так</small>
               </div>
             </div>
           </div>
