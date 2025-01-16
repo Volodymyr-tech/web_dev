@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "catalog",
     "blog",
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -145,3 +146,7 @@ EMAIL_PORT = os.getenv("EMAIL_PORT")  # Порт для SSL
 EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL")  # SSL для безопасного подключения
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")  # почта на Yandex
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")  # Пароль приложения Yandex
+
+AUTH_USER_MODEL = 'users.CustomUser'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
