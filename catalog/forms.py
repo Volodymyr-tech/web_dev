@@ -1,5 +1,7 @@
 from django import forms
-from catalog.models import Product, Categories, Lead
+
+from catalog.models import Categories, Lead, Product
+
 from .validators import validate_no_forbidden_words
 
 
@@ -40,13 +42,13 @@ class ProductForm(forms.ModelForm):
         return purchase_price
 
     def clean_image(self):
-        image = self.cleaned_data['image']
+        image = self.cleaned_data["image"]
         if image:
-            if not image.name.lower().endswith(('.jpeg', '.png', '.jpg')):
-                raise forms.ValidationError('Фото неверного формата')
+            if not image.name.lower().endswith((".jpeg", ".png", ".jpg")):
+                raise forms.ValidationError("Фото неверного формата")
 
             if image.size > 5 * 1024 * 1024:
-                raise forms.ValidationError('Фото не должно превышать 5 МБ')
+                raise forms.ValidationError("Фото не должно превышать 5 МБ")
 
         return image
 

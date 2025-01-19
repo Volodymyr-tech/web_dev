@@ -1,5 +1,6 @@
-from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
+from django.core.management.base import BaseCommand
+
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -8,7 +9,7 @@ class Command(BaseCommand):
             username="supermanager",
             email="admin@example.com",
             first_name="Valdemar",
-            last_name="Tesla"
+            last_name="Tesla",
         )
         admin_user.set_password("PswqPwfsqWF2212")
 
@@ -16,4 +17,6 @@ class Command(BaseCommand):
         admin_user.is_superuser = True
         admin_user.save()
 
-        self.stdout.write(self.style.SUCCESS(f"Администратор успешно создан: {admin_user.email}"))
+        self.stdout.write(
+            self.style.SUCCESS(f"Администратор успешно создан: {admin_user.email}")
+        )
