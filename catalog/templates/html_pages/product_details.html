@@ -10,9 +10,13 @@
               <p class="card-text">{{ product.name }} €{{ product.purchase_price }}</p>
               <p class="card-text">{{ product.description }}</p>
               <div class="d-flex justify-content-between align-items-center">
+                {% if user.is_authenticated %}
                 <div class="btn-group">
-                  <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:delete-product' pk=product.pk %}">Удалить</a>
-                  <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:update-product' pk=product.pk %}">Изменить</a>
+                    {% csrf_token %}
+                  <a href="{% url 'catalog:delete-product' pk=product.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+                <!-- Ссылка для редактирования (GET) -->
+                <a class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:update-product' pk=product.pk %}">Изменить</a>
+                {% endif %}
                 </div>
                 <small class="text-body-secondary">{{ product.updated_at }}</small>
               </div>
