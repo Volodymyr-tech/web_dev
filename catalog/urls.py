@@ -18,11 +18,6 @@ urlpatterns = [
     path("", MainPageView.as_view(), name="home"),
     path("contact/", LeadCreateView.as_view(), name="contact"),
     path("categories/", CategoriesListView.as_view(), name="categories"),
-   # path(
-  ##      "category-detail/<str:pk>",
-   #     CategoriesDetailView.as_view(),
-   #     name="category-detail",
-   # ),
     path("add-product/", AddProductView.as_view(), name="add_product_form"),
     path("delete-product/<int:pk>", ProductDeleteView.as_view(), name="delete-product"),
     path("update-product/<int:pk>", ProductUpdateView.as_view(), name="update-product"),
