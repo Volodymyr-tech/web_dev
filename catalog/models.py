@@ -19,6 +19,7 @@ class Product(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Категория",
         related_name="products",
+        to_field="id"
     )  # По умолчанию, ForeignKey связывается с первичным ключом (полем primary_key=True)
     purchase_price = models.FloatField(verbose_name="Цена за покупку")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -35,6 +36,7 @@ class Product(models.Model):
 
 
 class Categories(models.Model):
+
     IMMIGRATION = "Иммиграция"  # данные поля отображаются в БД
     BUSINESS = "Бизнес"
     ESTATE = "Недвижимость"
@@ -48,10 +50,11 @@ class Categories(models.Model):
     ]
 
     name = models.CharField(
-        primary_key=True,
+        #primary_key=True,
         max_length=155,
         choices=CATEGORIES_NAMES_CHOICES,
         verbose_name="Название категории",
+        null=False
     )
     description = models.CharField(max_length=255, verbose_name="Описание категории")
 

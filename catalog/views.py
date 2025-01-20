@@ -26,11 +26,17 @@ class CategoriesListView(ListView):
     context_object_name = "categories"  # Название переменной в шаблоне
 
 
-# class CategoriesDetailView(DetailView):
-#    '''Класс для детального просмотра категории'''
-#   model = Categories  # Модель для отображения
-#  template_name = "html_pages/categories_details.html"
-# context_object_name = "category"
+class CategoryDetailView(DetailView):
+    '''Класс для детального просмотра категории'''
+    model = Categories  # Модель для отображения
+    template_name = "html_pages/categories_details.html"
+    context_object_name = "category"
+
+class CategoryDeleteView(DeleteView):
+    model = Categories  # Модель для отображения
+    template_name = "html_pages/delete_category.html"
+    context_object_name = "category"
+    success_url = reverse_lazy("catalog:home")
 
 
 class LeadCreateView(CreateView):

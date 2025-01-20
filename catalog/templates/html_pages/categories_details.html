@@ -11,8 +11,8 @@
               <p class="card-text">{{ category.description }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:delete-detail' pk=category.pk %}">Удалить</a>
-                  <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:category-detail' pk=category.pk %}">Изменить</a>
+                  <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:category-delete' pk=category.pk %}">Удалить</a>
+                  <a type="button" class="btn btn-sm btn-outline-secondary" href="#">Изменить</a>
                 </div>
                 <small class="text-body-secondary">Как-то так</small>
               </div>
