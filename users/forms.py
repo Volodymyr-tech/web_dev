@@ -1,12 +1,15 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.forms import BooleanField
 
 from users.models import CustomUser
 
 
-# Форма регистрации
 class StyleProductMixin:
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
 
 
 class CustomUserCreationForm(StyleProductMixin, UserCreationForm):
@@ -24,41 +27,12 @@ class CustomUserCreationForm(StyleProductMixin, UserCreationForm):
             "country",
         )
 
-        widgets = {
-            "email": forms.EmailInput(
-                attrs={"class": "form-control", "placeholder": "Введите email"}
-            ),
-            "username": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Имя пользователя"}
-            ),
-            "phone_number": forms.TextInput(
-                attrs={"class": "form-control", "placeholder": "Введите номер телефона"}
-            ),
-            "password1": forms.PasswordInput(
-                attrs={"class": "form-control", "placeholder": "Пароль"}
-            ),
-            "password2": forms.PasswordInput(
-                attrs={"class": "form-control", "placeholder": "Повторите пароль"}
-            ),
-            "avatar": forms.ClearableFileInput(attrs={"class": "form-control-file"}),
-        }
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get("phone_number")
         if phone_number and not phone_number.isdigit():
             raise forms.ValidationError("Номер телефона должен содержать только цифры.")
         return phone_number
-
-
-# Форма авторизации
-
-
-class CustomAuthenticationForm(AuthenticationForm):
-    pass
-
-
-class StyleProductMixin:
-    pass
 
 
 class UserEditForm(StyleProductMixin, forms.ModelForm):
