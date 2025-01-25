@@ -38,14 +38,14 @@ class CategoryDetailView(DetailView):
     context_object_name = "category"
 
 
-class CategoryDeleteView(DeleteView):
+class CategoryDeleteView(LoginRequiredMixin, DeleteView, PermissionRequiredMixin):
     model = Categories  # Модель для отображения
     template_name = "html_pages/delete_category.html"
     context_object_name = "category"
     success_url = reverse_lazy("catalog:home")
 
 
-class LeadCreateView(CreateView):
+class LeadCreateView(LoginRequiredMixin, CreateView, PermissionRequiredMixin):
     """Класс для создания контактной формы. При отправке завяки приходит оповещение на почту"""
 
     form_class = LeadForm  # Указываем форму
@@ -78,7 +78,7 @@ class ProductDetailView(DetailView):
     context_object_name = "product"
 
 
-class AddProductView(CreateView):
+class AddProductView(LoginRequiredMixin, CreateView, PermissionRequiredMixin):
     """Класс для создания продукта"""
 
     form_class = ProductForm
@@ -111,7 +111,7 @@ class ProductSearchView(ListView):
         return Product.objects.all()
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView, PermissionRequiredMixin):
     """Класс для изменения продукта"""
 
     model = Product
@@ -128,7 +128,7 @@ class ProductUpdateView(UpdateView):
         raise PermissionDenied("Нет прав на изменение или удаление продукта")
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView, PermissionRequiredMixin):
     """Класс для удаления продукта"""
 
     model = Product
