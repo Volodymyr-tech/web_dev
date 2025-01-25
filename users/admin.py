@@ -6,5 +6,5 @@ from users.models import CustomUser
 # Register your models here.
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    exclude = ("password",)
+    list_display = ("id", "email")
     search_fields = ("is_active", "is_staff", "first_name")

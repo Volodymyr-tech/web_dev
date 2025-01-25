@@ -37,6 +37,7 @@ class CategoryDetailView(DetailView):
     template_name = "html_pages/categories_details.html"
     context_object_name = "category"
 
+
 class CategoryDeleteView(DeleteView):
     model = Categories  # Модель для отображения
     template_name = "html_pages/delete_category.html"
@@ -86,6 +87,13 @@ class AddProductView(CreateView):
         "catalog:home"
     )  # Переход на страницу каталога после добавления продукта
 
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        self.object = form.save()
+        self.object.owner = self.request.user
+        self.object.save()
+        return super().form_valid(form)
+
 
 class ProductSearchView(ListView):
     """Класс для поиска продукта"""
@@ -127,6 +135,15 @@ class ProductDeleteView(DeleteView):
     template_name = "html_pages/delete_product_confirm.html"
     context_object_name = "product"
     success_url = reverse_lazy("catalog:home")
+
+    def get_object(self, queryset=None):
+        product = super().get_object(queryset)
+        user = self.request.user
+
+        if product.owner == user or user.has_perm('catalog.delete_product'):
+            return product
+
+        raise PermissionDenied('Нет прав на удаление продукта')
 
 
 class CanUnpublishView(LoginRequiredMixin, UpdateView, PermissionRequiredMixin):
