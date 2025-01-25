@@ -70,7 +70,7 @@ class LeadCreateView(LoginRequiredMixin, CreateView, PermissionRequiredMixin):
         )
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(DetailView,PermissionRequiredMixin):
     """Класс для детального просмотра продукта"""
 
     model = Product
