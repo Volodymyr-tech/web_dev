@@ -1,10 +1,12 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 
-from catalog.forms import LeadForm, ProductForm
+from catalog.forms import LeadForm, ProductForm, ModerForm
 from catalog.models import Categories, Lead, Product
 from config import settings
 
@@ -16,6 +18,9 @@ class MainPageView(ListView):
     template_name = "html_pages/main_page.html"
     context_object_name = "products"
     paginate_by = 6
+
+    def get_queryset(self):
+        return Product.objects.filter(status="published")
 
 
 class CategoriesListView(ListView):
@@ -106,6 +111,14 @@ class ProductUpdateView(UpdateView):
     template_name = "html_pages/update_product_form.html"
     success_url = reverse_lazy("catalog:home")
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        if user.has_perm('catalog.can_unpublish_product') and user.has_perm('catalog.delete_product'):
+            return ModerForm
+        raise PermissionDenied("Нет прав на изменение или удаление продукта")
+
 
 class ProductDeleteView(DeleteView):
     """Класс для удаления продукта"""
@@ -114,6 +127,20 @@ class ProductDeleteView(DeleteView):
     template_name = "html_pages/delete_product_confirm.html"
     context_object_name = "product"
     success_url = reverse_lazy("catalog:home")
+
+
+class CanUnpublishView(LoginRequiredMixin, UpdateView, PermissionRequiredMixin):
+    """Класс для сняти публичности продукта"""
+    model = Product
+    form_class = ModerForm
+    template_name = "html_pages/update_product_form.html"
+    success_url = reverse_lazy("catalog:home")
+
+
+    def form_valid(self, form):
+        pass
+
+
 
 
 # def main_page(request):

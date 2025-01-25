@@ -10,14 +10,19 @@
               <p class="card-text">{{ product.name }} €{{ product.purchase_price }}</p>
               <p class="card-text">{{ product.description }}</p>
               <div class="d-flex justify-content-between align-items-center">
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and product.owner == user %}
                 <div class="btn-group">
+                  {% if product.owner == user %}
                     {% csrf_token %}
                   <a href="{% url 'catalog:delete-product' pk=product.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
                 <!-- Ссылка для редактирования (GET) -->
                 <a class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:update-product' pk=product.pk %}">Изменить</a>
                 {% endif %}
+                  {% if perms.catalog.can_unpublish_product %}
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:update-product' pk=product.pk %}">Снять с публикации</a>
+                  {% endif %}
                 </div>
+                {% endif %}
                 <small class="text-body-secondary">{{ product.updated_at }}</small>
               </div>
             </div>

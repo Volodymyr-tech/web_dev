@@ -76,3 +76,17 @@ class LeadForm(forms.ModelForm):
             ),
             "checkbox": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
+
+
+
+class ModerForm(forms.ModelForm):
+    status = forms.ChoiceField(
+        choices=Product.STATUS_CHOICES,  # Используем CHOICES, а не queryset
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+
+    class Meta:
+        model = Product
+        fields = ["status"]
+
+
