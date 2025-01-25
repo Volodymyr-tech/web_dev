@@ -135,6 +135,7 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView, PermissionRequiredMixin)
     template_name = "html_pages/delete_product_confirm.html"
     context_object_name = "product"
     success_url = reverse_lazy("catalog:home")
+    permission_required = 'catalog.delete_product'
 
     def get_object(self, queryset=None):
         product = super().get_object(queryset)
@@ -152,7 +153,7 @@ class CanUnpublishView(LoginRequiredMixin, UpdateView, PermissionRequiredMixin):
     form_class = ModerForm
     template_name = "html_pages/update_product_form.html"
     success_url = reverse_lazy("catalog:home")
-
+    permission_required = 'catalog.can_unpublish_product'
 
     def form_valid(self, form):
         pass

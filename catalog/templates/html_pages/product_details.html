@@ -16,10 +16,8 @@
                         <a href="{% url 'catalog:delete-product' pk=product.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
                         <a class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:update-product' pk=product.pk %}">Изменить</a>
                     {% endif %}
-                    {% if perms.catalog.can_unpublish_product %}
+                    {% if user.is_authenticated and perms.catalog.can_unpublish_product and product.owner != user %}
                         <a class="btn btn-sm btn-outline-secondary" href="{% url 'catalog:update-product' pk=product.pk %}">Снять с публикации</a>
-                    {% endif %}
-                    {% if product.owner == user or perms.catalog.delete_product %}
                         <a href="{% url 'catalog:delete-product' pk=product.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
                     {% endif %}
                 </div>
