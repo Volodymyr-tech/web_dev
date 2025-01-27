@@ -8,7 +8,7 @@
   <div class="card-body">
     <h1 class="card-title">{{ blog_post.title }}</h1>
 
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and perms.blog.change_blogpost and perms.blog.delete_blogpost %}
       <a href="{% url 'blog:update' blog_post.slug %}" class="btn btn-warning">Редактировать</a>
 
       <form method="post" action="{% url 'blog:delete' blog_post.slug %}" style="display:inline;">

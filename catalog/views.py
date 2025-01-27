@@ -45,6 +45,7 @@ class CategoryDeleteView(LoginRequiredMixin, DeleteView, PermissionRequiredMixin
     success_url = reverse_lazy("catalog:home")
 
 
+
 class LeadCreateView(LoginRequiredMixin, CreateView, PermissionRequiredMixin):
     """Класс для создания контактной формы. При отправке завяки приходит оповещение на почту"""
 
