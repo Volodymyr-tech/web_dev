@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalog',
+    'blog'
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,12 @@ MEDIA_ROOT = BASE_DIR / "media"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST')  # SMTP сервер Yandex
+EMAIL_PORT = os.getenv('EMAIL_PORT')  # Порт для SSL
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL')  # SSL для безопасного подключения
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # почта на Yandex
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # Пароль приложения Yandex

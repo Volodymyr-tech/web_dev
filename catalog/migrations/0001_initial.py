@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Categories',
+            name='categories',
             fields=[
                 ('name', models.CharField(max_length=155, primary_key=True, serialize=False, verbose_name='Название категории')),
                 ('description', models.CharField(max_length=255, verbose_name='Описание категории')),
@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 ('purchase_price', models.FloatField(verbose_name='Цена за покупку')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='catalog.categories.html', verbose_name='Категория')),
+                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='catalog.Categories', verbose_name='Категория')),
             ],
             options={
                 'verbose_name': 'Продукт',

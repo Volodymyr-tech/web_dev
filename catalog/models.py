@@ -48,3 +48,17 @@ class Categories(models.Model):
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
         ordering = ["name"]
+
+
+class Lead(models.Model):
+    name = models.CharField(max_length=155, verbose_name="Имя")
+    email = models.EmailField(verbose_name="Email")
+    phone = models.CharField(max_length=155, verbose_name="Телефон")
+    message = models.TextField(verbose_name="Сообщение")
+    created_at = models.DateTimeField(auto_now_add=True)
+    checkbox = models.BooleanField(verbose_name="Согласие на обработку персональных данных", default=False)
+
+    class Meta:
+        verbose_name = "Лид"
+        verbose_name_plural = "Лиды"
+        ordering = ["-created_at"]
