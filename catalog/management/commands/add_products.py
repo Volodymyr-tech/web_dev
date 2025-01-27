@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from catalog.models import Product
 from django.core.management import call_command
 
+
 class Command(BaseCommand):
     help = "Добавление продуктов в БД"
 
@@ -10,4 +11,3 @@ class Command(BaseCommand):
 
         call_command("loaddata", "fixture_products.json")
         self.stdout.write(self.style.SUCCESS("Продукты успешно добавлены"))
-
