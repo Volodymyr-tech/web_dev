@@ -1,5 +1,7 @@
 from django import forms
-from catalog.models import Product, Categories, Lead
+
+from catalog.models import Categories, Lead, Product
+
 from .validators import validate_no_forbidden_words
 
 
@@ -13,12 +15,16 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ["name", "category", "description", "image", "purchase_price"]
+        fields = ["name", "category", "description", "image", "purchase_price", "status"]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "description": forms.Textarea(attrs={"class": "form-control"}),
             "image": forms.ClearableFileInput(attrs={"class": "form-control-file"}),
             "purchase_price": forms.NumberInput(attrs={"class": "form-control"}),
+            "status": forms.Select(
+                attrs={"class": "form-control"},
+                choices=Product.STATUS_CHOICES,
+            ),  # Для выпадающего списка статусов продукта
         }
 
         # Подключаем валидаторы
@@ -40,13 +46,13 @@ class ProductForm(forms.ModelForm):
         return purchase_price
 
     def clean_image(self):
-        image = self.cleaned_data['image']
+        image = self.cleaned_data["image"]
         if image:
-            if not image.name.lower().endswith(('.jpeg', '.png', '.jpg')):
-                raise forms.ValidationError('Фото неверного формата')
+            if not image.name.lower().endswith((".jpeg", ".png", ".jpg")):
+                raise forms.ValidationError("Фото неверного формата")
 
             if image.size > 5 * 1024 * 1024:
-                raise forms.ValidationError('Фото не должно превышать 5 МБ')
+                raise forms.ValidationError("Фото не должно превышать 5 МБ")
 
         return image
 
@@ -74,3 +80,17 @@ class LeadForm(forms.ModelForm):
             ),
             "checkbox": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
+
+
+
+class ModerForm(forms.ModelForm):
+    status = forms.ChoiceField(
+        choices=Product.STATUS_CHOICES,  # Используем CHOICES, а не queryset
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+
+    class Meta:
+        model = Product
+        fields = ["status"]
+
+

@@ -1,7 +1,3 @@
-import os
-
-from dotenv import load_dotenv
-
 from dotenv import load_dotenv
 
 from config import settings
@@ -10,15 +6,9 @@ load_dotenv()
 
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
-
 # Create your views here.
-from django.views.generic import (
-    ListView,
-    CreateView,
-    DetailView,
-    DeleteView,
-    UpdateView,
-)
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 
 from blog.forms import BlogPostForm
 from blog.models import BlogPost

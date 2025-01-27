@@ -1,25 +1,26 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-)
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 
-from catalog.models import Product, Categories, Lead
-from catalog.forms import ProductForm, LeadForm
+from catalog.forms import LeadForm, ProductForm, ModerForm
+from catalog.models import Categories, Lead, Product
 from config import settings
 
 
 class MainPageView(ListView):
-    '''Класс для просмотра списка продуктов'''
+    """Класс для просмотра списка продуктов"""
+
     model = Product
     template_name = "html_pages/main_page.html"
     context_object_name = "products"
     paginate_by = 6
+
+    def get_queryset(self):
+        return Product.objects.filter(status="published")
 
 
 class CategoriesListView(ListView):
@@ -30,15 +31,23 @@ class CategoriesListView(ListView):
     context_object_name = "categories"  # Название переменной в шаблоне
 
 
-#class CategoriesDetailView(DetailView):
-#    '''Класс для детального просмотра категории'''
- #   model = Categories  # Модель для отображения
-  #  template_name = "html_pages/categories_details.html"
-   # context_object_name = "category"
+class CategoryDetailView(DetailView):
+    '''Класс для детального просмотра категории'''
+    model = Categories  # Модель для отображения
+    template_name = "html_pages/categories_details.html"
+    context_object_name = "category"
 
 
-class LeadCreateView(CreateView):
-    '''Класс для создания контактной формы. При отправке завяки приходит оповещение на почту'''
+class CategoryDeleteView(LoginRequiredMixin, DeleteView, PermissionRequiredMixin):
+    model = Categories  # Модель для отображения
+    template_name = "html_pages/delete_category.html"
+    context_object_name = "category"
+    success_url = reverse_lazy("catalog:home")
+
+
+class LeadCreateView(LoginRequiredMixin, CreateView, PermissionRequiredMixin):
+    """Класс для создания контактной формы. При отправке завяки приходит оповещение на почту"""
+
     form_class = LeadForm  # Указываем форму
     template_name = "html_pages/contact.html"  # Шаблон для рендеринга
     success_url = "/catalog/"  # Куда перенаправлять после успешного сохранения
@@ -61,24 +70,34 @@ class LeadCreateView(CreateView):
         )
 
 
-class ProductDetailView(DetailView):
-    '''Класс для детального просмотра продукта'''
+class ProductDetailView(DetailView,PermissionRequiredMixin):
+    """Класс для детального просмотра продукта"""
+
     model = Product
     template_name = "html_pages/product_details.html"
     context_object_name = "product"
 
 
-class AddProductView(CreateView):
-    '''Класс для создания продукта'''
+class AddProductView(LoginRequiredMixin, CreateView, PermissionRequiredMixin):
+    """Класс для создания продукта"""
+
     form_class = ProductForm
     template_name = "html_pages/add_product_form.html"
     success_url = reverse_lazy(
         "catalog:home"
     )  # Переход на страницу каталога после добавления продукта
 
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        self.object = form.save()
+        self.object.owner = self.request.user
+        self.object.save()
+        return super().form_valid(form)
+
 
 class ProductSearchView(ListView):
-    '''Класс для поиска продукта'''
+    """Класс для поиска продукта"""
+
     model = Product
     template_name = "html_pages/product_search_results.html"
     context_object_name = "products"
@@ -92,20 +111,53 @@ class ProductSearchView(ListView):
         return Product.objects.all()
 
 
-class ProductUpdateView(UpdateView):
-    '''Класс для изменения продукта'''
+class ProductUpdateView(LoginRequiredMixin, UpdateView, PermissionRequiredMixin):
+    """Класс для изменения продукта"""
+
     model = Product
     form_class = ProductForm
     template_name = "html_pages/update_product_form.html"
     success_url = reverse_lazy("catalog:home")
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        if user.has_perm('catalog.can_unpublish_product') and user.has_perm('catalog.delete_product'):
+            return ModerForm
+        raise PermissionDenied("Нет прав на изменение или удаление продукта")
 
-class ProductDeleteView(DeleteView):
-    '''Класс для удаления продукта'''
+
+class ProductDeleteView(LoginRequiredMixin, DeleteView, PermissionRequiredMixin):
+    """Класс для удаления продукта"""
+
     model = Product
     template_name = "html_pages/delete_product_confirm.html"
     context_object_name = "product"
     success_url = reverse_lazy("catalog:home")
+
+    def get_object(self, queryset=None):
+        product = super().get_object(queryset)
+        user = self.request.user
+
+        if product.owner == user or user.has_perm('catalog.delete_product'):
+            return product
+
+        raise PermissionDenied('Нет прав на удаление продукта')
+
+
+class CanUnpublishView(LoginRequiredMixin, UpdateView, PermissionRequiredMixin):
+    """Класс для сняти публичности продукта"""
+    model = Product
+    form_class = ModerForm
+    template_name = "html_pages/update_product_form.html"
+    success_url = reverse_lazy("catalog:home")
+
+
+    def form_valid(self, form):
+        pass
+
+
 
 
 # def main_page(request):

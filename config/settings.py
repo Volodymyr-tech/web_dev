@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
-
-from django.conf.global_settings import STATICFILES_DIRS, MEDIA_URL, MEDIA_ROOT
+from django.conf.global_settings import (MEDIA_ROOT, MEDIA_URL, SERVER_EMAIL,
+                                         STATICFILES_DIRS)
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "catalog",
     "blog",
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -145,3 +146,11 @@ EMAIL_PORT = os.getenv("EMAIL_PORT")  # Порт для SSL
 EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL")  # SSL для безопасного подключения
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")  # почта на Yandex
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")  # Пароль приложения Yandex
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+AUTH_USER_MODEL = "users.CustomUser"
+LOGIN_REDIRECT_URL = "catalog:home"
+LOGOUT_REDIRECT_URL = "catalog:home"
+LOGIN_URL = "/users/login/"
