@@ -82,3 +82,5 @@ class UpdateBlogView(UpdateView, PermissionRequiredMixin, LoginRequiredMixin):
 
     def get_success_url(self):
         return reverse_lazy("blog:detail", kwargs={"slug": self.object.slug})
+
+
