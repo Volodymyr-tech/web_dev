@@ -3,12 +3,16 @@ from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 
 from catalog.forms import LeadForm, ProductForm, ModerForm
 from catalog.models import Categories, Lead, Product
 from config import settings
+from django.core.cache import cache
+from django.db import models
 
 
 class MainPageView(ListView):
@@ -70,13 +74,14 @@ class LeadCreateView(LoginRequiredMixin, CreateView, PermissionRequiredMixin):
             fail_silently=False,  # Отключаем отправку писем с ошибками
         )
 
-
-class ProductDetailView(DetailView,PermissionRequiredMixin):
+@method_decorator(cache_page(60 * 15), name='dispatch')
+class ProductDetailView(DetailView):
     """Класс для детального просмотра продукта"""
 
     model = Product
     template_name = "html_pages/product_details.html"
     context_object_name = "product"
+
 
 
 class AddProductView(LoginRequiredMixin, CreateView, PermissionRequiredMixin):
