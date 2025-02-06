@@ -25,7 +25,7 @@ class MainPageView(ListView):
 
     def get_queryset(self):
         products = CacheService.get_cached_obj_or_objects("catalog", self.model.__name__, request=self.request)
-        print(products)
+        #print(products)
         return products
 
 
@@ -39,7 +39,7 @@ class CategoriesListView(ListView):
 
     def get_queryset(self):
         categories = CacheService.get_cached_obj_or_objects("catalog", self.model.__name__, request=self.request)
-        print(categories)
+        #print(categories)
         return categories
 
 
@@ -93,7 +93,7 @@ class ProductDetailView(DetailView):
     def get_object(self, queryset=None):
         product_id = self.kwargs.get("pk")
         product = CacheService.get_cached_obj_or_objects("catalog", self.model.__name__, object_id=product_id, request=self.request)
-        print(product)
+        #print(product)
         return product
 
 
