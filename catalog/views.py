@@ -6,15 +6,17 @@ from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 
 from catalog.forms import LeadForm, ProductForm, ModerForm
 from catalog.models import Categories, Product
+from catalog.services import GetCategory
 from config.services import CacheService
 from config import settings
 
-
+#@method_decorator(vary_on_cookie, name="dispatch")
 class MainPageView(ListView):
     """Класс для просмотра списка продуктов"""
 
@@ -25,7 +27,28 @@ class MainPageView(ListView):
 
     def get_queryset(self):
         products = CacheService.get_cached_obj_or_objects("catalog", self.model.__name__, request=self.request)
-        #print(products)
+        if not self.request.user.is_authenticated:
+            filtered_products = products.filter(status="published")
+            #print(filtered_products)
+            return filtered_products
+        else:
+            filtered_products = products.filter(status="published", owner_id=self.request.user)
+            #print(filtered_products)
+            return filtered_products
+
+
+
+class ProductsByCategoryView(ListView):
+    """Класс для вывода списка продуктов по категории"""
+    model = Product
+    template_name = "html_pages/products_by_category.html"
+    context_object_name = "products"
+    paginate_by = 6
+
+
+    def get_queryset(self):
+        category_id = self.kwargs.get("pk")
+        products = GetCategory.get_product_by_category(category_id)
         return products
 
 
