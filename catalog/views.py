@@ -1,3 +1,5 @@
+from itertools import product
+
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
@@ -22,7 +24,9 @@ class MainPageView(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return Product.objects.filter(status="published")
+        products = CacheService.get_cached_obj_or_objects("catalog", self.model.__name__, request=self.request)
+        print(products)
+        return products
 
 
 class CategoriesListView(ListView):
@@ -34,7 +38,9 @@ class CategoriesListView(ListView):
 
 
     def get_queryset(self):
-        return CacheService.get_cached_obj_or_objects("catalog", self.model.__name__, None)
+        categories = CacheService.get_cached_obj_or_objects("catalog", self.model.__name__, request=self.request)
+        print(categories)
+        return categories
 
 
 class CategoryDetailView(DetailView):
@@ -76,13 +82,19 @@ class LeadCreateView(LoginRequiredMixin, CreateView, PermissionRequiredMixin):
             fail_silently=False,  # Отключаем отправку писем с ошибками
         )
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+
 class ProductDetailView(DetailView):
     """Класс для детального просмотра продукта"""
 
     model = Product
     template_name = "html_pages/product_details.html"
     context_object_name = "product"
+
+    def get_object(self, queryset=None):
+        product_id = self.kwargs.get("pk")
+        product = CacheService.get_cached_obj_or_objects("catalog", self.model.__name__, object_id=product_id, request=self.request)
+        print(product)
+        return product
 
 
 
