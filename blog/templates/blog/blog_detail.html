@@ -1,8 +1,10 @@
 {% extends 'html_pages/base.html' %}
+{% load cache %}
 
 {% block title %}{{ blog_post.title }}{% endblock %}
 
 {% block content %}
+{% cache 600 blog_post blog_post.id %}
 <div class="card mb-3 w-50 p-3">
   <img src="{{ blog_post.image.url }}" style="width: 50%; height: 100px;" alt="...">
   <div class="card-body">
@@ -23,4 +25,5 @@
     </p>
   </div>
 </div>
+{% endcache %}
 {% endblock %}

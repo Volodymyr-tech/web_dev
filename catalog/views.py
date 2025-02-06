@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.exceptions import ImproperlyConfigured, PermissionDenied
+from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -9,10 +8,9 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 
 from catalog.forms import LeadForm, ProductForm, ModerForm
-from catalog.models import Categories, Lead, Product
+from catalog.models import Categories, Product
+from config.services import CacheService
 from config import settings
-from django.core.cache import cache
-from django.db import models
 
 
 class MainPageView(ListView):
@@ -33,6 +31,10 @@ class CategoriesListView(ListView):
     model = Categories  # Модель для отображения
     template_name = "html_pages/categories.html"  # Путь к шаблону
     context_object_name = "categories"  # Название переменной в шаблоне
+
+
+    def get_queryset(self):
+        return CacheService.get_cached_obj_or_objects("catalog", self.model.__name__, None)
 
 
 class CategoryDetailView(DetailView):

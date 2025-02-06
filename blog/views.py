@@ -28,6 +28,8 @@ class BlogListView(ListView):
     }  # Выводим 2 самых популярных статей
 
 
+
+
 class AddBlogFormView(CreateView, PermissionRequiredMixin, LoginRequiredMixin):
     form_class = BlogPostForm
     template_name = "blog/add_blog_form.html"
