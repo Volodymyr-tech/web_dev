@@ -9,15 +9,15 @@ class CacheService:
     def get_cached_obj_or_objects(app_name: str, model_name: str, object_id=None, request: HttpRequest = None):
         """Получает кэшированную страницу или объект только для пользователя с совпадающим sessionid или user_id"""
         if CACHE_ENABLED:
-            session_id = request.COOKIES.get("sessionid") if request.COOKIES.get("sessionid") else "non_registered_user"# Получаем sessionid из Cookies
-            print(session_id)
+            #session_id = request.COOKIES.get("sessionid") if request.COOKIES.get("sessionid") else "non_registered_user"# Получаем sessionid из Cookies
+            #print(session_id)
             user_id = request.user.id if request.user.is_authenticated else "Guest"  # Получаем ID пользователя
 
             # ❗ Разделяем кэш для списка и детального просмотра
             if object_id:
-                cache_key = f"{model_name}_detail_{object_id}_{user_id}_{session_id}"  # Уникальный ключ для одного объекта
+                cache_key = f"{model_name}_detail_{object_id}_{user_id}"  # Уникальный ключ для одного объекта
             else:
-                cache_key = f"{model_name}_list_{user_id}_{session_id}"  # Уникальный ключ для списка
+                cache_key = f"{model_name}_list_{user_id}"  # Уникальный ключ для списка
 
             # Проверяем, есть ли данные в кэше
             cached_data = cache.get(cache_key)
