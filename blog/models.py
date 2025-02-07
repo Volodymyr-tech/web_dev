@@ -36,6 +36,7 @@ class BlogPost(models.Model):
         verbose_name_plural = "Статьи блога"
         ordering = ["-created_at"]
 
+
     def save(self, *args, **kwargs):
         if not self.slug and self.title:
             self.slug = slugify(self.title)

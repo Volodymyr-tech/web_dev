@@ -1,6 +1,7 @@
 {% extends 'html_pages/base.html' %}
 
 {% block content %}
+{% if user.is_authenticated and perms.blog.change_blogpost %}
 <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="card p-4 shadow-sm" style="max-width: 600px; width: 100%;">
         <h2 class="text-center mb-4">Редактирование статьи</h2>
@@ -19,4 +20,5 @@
         </form>
     </div>
 </div>
+{% endif %}
 {% endblock %}

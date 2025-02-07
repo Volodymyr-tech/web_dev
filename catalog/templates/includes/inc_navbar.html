@@ -24,13 +24,15 @@
               <li>
                 <form method="post" action="{% url 'users:logout' %}">
                   {% csrf_token %}
+                  <li><a class="dropdown-item" href="{% url 'users:update-user' user.pk %}">Редактировать профиль</a></li>
                   <button type="submit" class="dropdown-item">Выход</button>
                 </form>
               </li>
+            {% if user.is_authenticated and perms.blog.add_blogpost and perms.catalog.add_product %}
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{% url 'catalog:add_product_form' %}">Добавить продукт</a></li>
               <li><a class="dropdown-item" href="{% url 'blog:add-article' %}">Добавить статью</a></li>
-              <li><a class="dropdown-item" href="{% url 'users:update-user' user.pk %}">Редактировать профиль</a></li>
+            {% endif %}
             {% else %}
               <li><a class="dropdown-item" href="{% url 'users:register' %}">Регистрация</a></li>
               <li><a class="dropdown-item" href="{% url 'users:login' %}">Вход</a></li>

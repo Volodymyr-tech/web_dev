@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from dotenv import load_dotenv
 
 from config import settings
@@ -27,7 +28,7 @@ class BlogListView(ListView):
     }  # Выводим 2 самых популярных статей
 
 
-class AddBlogFormView(CreateView):
+class AddBlogFormView(CreateView, PermissionRequiredMixin, LoginRequiredMixin):
     form_class = BlogPostForm
     template_name = "blog/add_blog_form.html"
     success_url = reverse_lazy(
@@ -66,14 +67,14 @@ class BlogDetailView(DetailView):
         return self.object
 
 
-class DeleteBlogView(DeleteView):
+class DeleteBlogView(DeleteView, PermissionRequiredMixin, LoginRequiredMixin):
     model = BlogPost
     success_url = reverse_lazy("blog:blog")
     template_name = "blog/delete_blog_confirm.html"
     context_object_name = "blog_post"
 
 
-class UpdateBlogView(UpdateView):
+class UpdateBlogView(UpdateView, PermissionRequiredMixin, LoginRequiredMixin):
     model = BlogPost
     template_name = "blog/update_blog_form.html"
     form_class = BlogPostForm
@@ -81,3 +82,5 @@ class UpdateBlogView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy("blog:detail", kwargs={"slug": self.object.slug})
+
+
