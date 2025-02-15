@@ -1,0 +1,29 @@
+{% extends 'html_pages/base.html' %}
+{% load cache %}
+
+{% block title %}{{ blog_post.title }}{% endblock %}
+
+{% block content %}
+{% cache 600 blog_post blog_post.id %}
+<div class="card mb-3 w-50 p-3">
+  <img src="{{ blog_post.image.url }}" style="width: 50%; height: 100px;" alt="...">
+  <div class="card-body">
+    <h1 class="card-title">{{ blog_post.title }}</h1>
+
+    {% if user.is_authenticated and perms.blog.change_blogpost and perms.blog.delete_blogpost %}
+      <a href="{% url 'blog:update' blog_post.slug %}" class="btn btn-warning">Редактировать</a>
+
+      <form method="post" action="{% url 'blog:delete' blog_post.slug %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Удалить</button>
+      </form>
+    {% endif %}
+
+    <p class="card-text">{{ blog_post.content|linebreaks }}</p>
+    <p class="card-text">
+      <small class="text-body-secondary">{{ blog_post.created_at }}</small>
+    </p>
+  </div>
+</div>
+{% endcache %}
+{% endblock %}
