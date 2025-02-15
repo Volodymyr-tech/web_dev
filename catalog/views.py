@@ -1,16 +1,22 @@
+from itertools import product
+
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.exceptions import ImproperlyConfigured, PermissionDenied
+from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
-from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 
 from catalog.forms import LeadForm, ProductForm, ModerForm
-from catalog.models import Categories, Lead, Product
+from catalog.models import Categories, Product
+from catalog.services import GetCategory
+from config.services import CacheService
 from config import settings
 
-
+#@method_decorator(vary_on_cookie, name="dispatch")
 class MainPageView(ListView):
     """Класс для просмотра списка продуктов"""
 
@@ -20,7 +26,30 @@ class MainPageView(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return Product.objects.filter(status="published")
+        products = CacheService.get_cached_obj_or_objects("catalog", self.model.__name__, request=self.request)
+        if not self.request.user.is_authenticated:
+            filtered_products = products.filter(status="published")
+            #print(filtered_products)
+            return filtered_products
+        else:
+            filtered_products = products.filter(status="published", owner_id=self.request.user)
+            #print(filtered_products)
+            return filtered_products
+
+
+
+class ProductsByCategoryView(ListView):
+    """Класс для вывода списка продуктов по категории"""
+    model = Product
+    template_name = "html_pages/products_by_category.html"
+    context_object_name = "products"
+    paginate_by = 6
+
+
+    def get_queryset(self):
+        category_id = self.kwargs.get("pk")
+        products = GetCategory.get_product_by_category(category_id)
+        return products
 
 
 class CategoriesListView(ListView):
@@ -29,6 +58,12 @@ class CategoriesListView(ListView):
     model = Categories  # Модель для отображения
     template_name = "html_pages/categories.html"  # Путь к шаблону
     context_object_name = "categories"  # Название переменной в шаблоне
+
+
+    def get_queryset(self):
+        categories = CacheService.get_cached_obj_or_objects("catalog", self.model.__name__, request=self.request)
+        #print(categories)
+        return categories
 
 
 class CategoryDetailView(DetailView):
@@ -71,12 +106,19 @@ class LeadCreateView(LoginRequiredMixin, CreateView, PermissionRequiredMixin):
         )
 
 
-class ProductDetailView(DetailView,PermissionRequiredMixin):
+class ProductDetailView(DetailView):
     """Класс для детального просмотра продукта"""
 
     model = Product
     template_name = "html_pages/product_details.html"
     context_object_name = "product"
+
+    def get_object(self, queryset=None):
+        product_id = self.kwargs.get("pk")
+        product = CacheService.get_cached_obj_or_objects("catalog", self.model.__name__, object_id=product_id, request=self.request)
+        #print(product)
+        return product
+
 
 
 class AddProductView(LoginRequiredMixin, CreateView, PermissionRequiredMixin):
